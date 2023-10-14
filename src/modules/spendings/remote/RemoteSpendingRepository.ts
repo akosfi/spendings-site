@@ -30,7 +30,7 @@ export default class RemoteSpendingRepository implements SpendingRepository {
             urlSearchParams.append('currency', currency);
         }
         if (orderBy) {
-            urlSearchParams.append('orderBy', orderBy);
+            urlSearchParams.append('order', orderBy);
         }
 
         const { data: spendings }: AxiosResponse<RemoteSpendingDTO[]> =

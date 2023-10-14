@@ -1,7 +1,6 @@
 @import '../../../../../styles/breakpoints.scss';
 
 .content {
-    width: 100%;
     margin: 24px 16px 0 16px;
 
     @include tablet-up {
@@ -10,10 +9,10 @@
     }
 
     @include small-desktop-up {
-        width: 50%;
+        width: 70%;
     }
 
     @include large-desktop-up {
-        width: 40%;
+        width: 800px;
     }
 }

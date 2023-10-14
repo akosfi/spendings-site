@@ -1,0 +1,10 @@
+@import '../../../../../../../styles/mixins.scss';
+
+.select {
+    @include input-base;
+    box-sizing: content-box;
+
+    &:focus {
+        outline: none;
+    }
+}

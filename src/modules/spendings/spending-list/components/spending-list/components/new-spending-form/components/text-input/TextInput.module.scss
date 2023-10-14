@@ -1,0 +1,10 @@
+@import '../../../../../../../../../styles/mixins.scss';
+
+.input {
+    @include input-base;
+    background-color: white;
+
+    &:focus {
+        outline: none;
+    }
+}

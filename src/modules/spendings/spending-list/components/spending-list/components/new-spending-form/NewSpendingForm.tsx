@@ -6,6 +6,13 @@ import { AppDispatch } from 'redux/store';
 import { RemoteSpendingFactory } from 'modules/spendings/remote/RemoteSpending';
 
 import css from './NewSpendingForm.module.scss';
+import TextInput from './components/text-input/TextInput';
+import Button from './components/button/Button';
+import SelectInput, { SelectOption } from '../select-input/SelectInput';
+
+const currencyOptions: SelectOption[] = Object.values(SpendingCurrency).map(
+    (currency) => ({ id: currency, label: currency }),
+);
 
 const NewSpendingForm: FC = () => {
     const dispatch = useDispatch<AppDispatch>();
@@ -22,7 +29,7 @@ const NewSpendingForm: FC = () => {
                     description,
                     amount,
                     currency,
-                    spentAt: '2023-09-04T18:58:13.359000Z', // TODO
+                    spentAt: new Date().toISOString(),
                     id: 0,
                 }),
                 resetForm: () => {
@@ -35,33 +42,27 @@ const NewSpendingForm: FC = () => {
 
     return (
         <div className={css['form']}>
-            <input
-                type="text"
+            <TextInput
                 value={description}
-                onChange={(e) => setDescription(e.target.value)}
+                setValue={setDescription}
                 placeholder="description"
             />
-            <input
+            <TextInput
                 type="number"
-                value={amount}
-                onChange={(e) => setAmount(Number(e.target.value))}
+                value={String(amount)}
+                setValue={(value) => setAmount(Number(value))}
                 placeholder="0"
             />
 
-            <select
-                onChange={(e) =>
-                    setCurrency(e.target.value as SpendingCurrency)
-                }
+            <SelectInput
                 value={currency}
-            >
-                {Object.values(SpendingCurrency).map((currency) => (
-                    <option key={currency} value={currency}>
-                        {currency}
-                    </option>
-                ))}
-            </select>
+                options={currencyOptions}
+                setValue={(option) =>
+                    setCurrency(option.id as SpendingCurrency)
+                }
+            />
 
-            <button onClick={handleSave}>Save</button>
+            <Button label="Save" onClick={handleSave} disabled={!description} />
         </div>
     );
 };

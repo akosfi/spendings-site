@@ -1,11 +1,27 @@
+@import '../../../../../../../styles/breakpoints.scss';
+
 .filters {
     display: grid;
-
-    grid-template-columns: 35% 25%;
+    margin-bottom: 24px;
+    grid-template-columns: 100%;
+    row-gap: 16px;
     justify-content: space-between;
+
+    @include small-desktop-up {
+        grid-template-columns: 35% 25%;
+    }
 
     .currencyFilter {
         display: flex;
         justify-content: space-between;
+        width: 50%;
+
+        @include mobile-up {
+            width: 30%;
+        }
+
+        @include small-desktop-up {
+            width: unset;
+        }
     }
 }

@@ -1,19 +1,35 @@
+@import '../../../../../../../../../styles/breakpoints.scss';
+
 .item {
     width: 100%;
     display: grid;
-    grid-template-columns: 52px 30% 1fr 10% 20%;
-    height: 100px;
     background-color: white;
     border-radius: 8px;
     margin-bottom: 16px;
     padding: 24px;
     box-sizing: border-box;
     align-items: center;
+    grid-template-columns: 52px 1fr;
+    grid-template-areas:
+        'icon information'
+        'icon amount'
+        'icon actions';
+
+    @include tablet-up {
+        height: 100px;
+        grid-template-areas: unset;
+        grid-template-columns: 52px 40% 1fr 40% 10%;
+    }
 
     .icon-container {
         display: flex;
         justify-content: center;
         align-items: center;
+        grid-area: icon;
+
+        @include tablet-up {
+            grid-area: unset;
+        }
 
         .icon {
             width: 100%;
@@ -30,9 +46,70 @@
 
     .information {
         padding-left: 24px;
+        padding-bottom: 8px;
+        display: flex;
+        flex-direction: column;
+        gap: 2px;
+        grid-area: information;
+
+        @include tablet-up {
+            grid-area: unset;
+            padding-bottom: unset;
+        }
 
         .description {
             font-weight: 700;
+        }
+
+        .spentAtDate {
+            color: #919191;
+            font-size: 14px;
+        }
+    }
+
+    .amount {
+        font-weight: bold;
+        grid-area: amount;
+
+        padding-left: 24px;
+        padding-bottom: 8px;
+
+        @include tablet-up {
+            padding-right: 8px;
+            padding-left: unset;
+            padding-bottom: unset;
+            text-align: end;
+            grid-area: unset;
+        }
+    }
+
+    .actions {
+        display: flex;
+        justify-content: flex-end;
+        align-items: center;
+        gap: 16px;
+        grid-area: actions;
+
+        @include tablet-up {
+            justify-content: center;
+            grid-area: unset;
+        }
+
+        .icon {
+            flex: 0 0 32px;
+            height: 32px;
+            background-color: #f2f3ff;
+            border-radius: 8px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            cursor: not-allowed;
+
+            img {
+                opacity: 0.5;
+                width: 18px;
+                height: 18px;
+            }
         }
     }
 }

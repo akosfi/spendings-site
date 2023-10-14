@@ -2,5 +2,14 @@
 
 .form {
     display: grid;
-    grid-template-columns: 60% 20% 10% 10%;
+    grid-template-columns: 48% 48%;
+    column-gap: 4%;
+    row-gap: 16px;
+    margin-bottom: 48px;
+
+    @include small-desktop-up {
+        grid-template-columns: 54% 20% 10% 10%;
+        gap: 2%;
+        row-gap: unset;
+    }
 }
