@@ -5,10 +5,7 @@ import {
 } from 'modules/spendings';
 
 interface CreateSpendingUseCaseRequest {
-    spendingToCreate: Pick<
-        SpendingCreationDTO,
-        'amount' | 'currency' | 'description'
-    >;
+    spendingToCreate: SpendingCreationDTO;
     spendingRepository: SpendingRepository;
 }
 

@@ -5,8 +5,8 @@ import {
 } from 'modules/spendings';
 
 interface ListSpendingUseCaseRequest {
-    currency: SpendingCurrency;
-    orderBy: 'spent_at' | '-spent_at' | 'amount' | '-amount';
+    currency?: SpendingCurrency;
+    orderBy?: 'spent_at' | '-spent_at' | 'amount' | '-amount';
     spendingRepository: SpendingRepository;
 }
 

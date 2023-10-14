@@ -12,7 +12,10 @@ export interface SpendingDTO {
 }
 
 export interface SpendingCreationDTO
-    extends Pick<SpendingDTO, 'amount' | 'currency' | 'description'> {}
+    extends Pick<
+        SpendingDTO,
+        'amount' | 'currency' | 'description' | 'spentAt'
+    > {}
 
 export default class Spending implements SpendingDTO {
     id: number;
