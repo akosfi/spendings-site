@@ -1,11 +1,7 @@
-import {
-    Spending,
-    SpendingCreationDTO,
-    SpendingRepository,
-} from 'modules/spendings';
+import { Spending, SpendingRepository } from 'modules/spendings';
 
 interface CreateSpendingUseCaseRequest {
-    spendingToCreate: SpendingCreationDTO;
+    spendingToCreate: Spending;
     spendingRepository: SpendingRepository;
 }
 

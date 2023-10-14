@@ -1,5 +1,5 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
-import { SpendingCreationDTO, SpendingDTO } from 'modules/spendings';
+import { Spending, SpendingDTO } from 'modules/spendings';
 import RemoteSpendingRepository from 'modules/spendings/remote/RemoteSpendingRepository';
 import axiosInstance from 'remote/axiosInstance';
 import CreateSpendingUseCase from '../../useCases/createSpendingUseCase';
@@ -7,7 +7,7 @@ import CreateSpendingUseCase from '../../useCases/createSpendingUseCase';
 const createSpendingThunk = createAsyncThunk<
     { spendingDTO: SpendingDTO },
     {
-        spendingToCreate: SpendingCreationDTO;
+        spendingToCreate: Spending;
         resetForm: () => void;
     },
     { rejectValue: string }

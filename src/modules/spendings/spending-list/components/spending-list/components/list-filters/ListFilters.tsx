@@ -3,17 +3,25 @@ import listSpendingsThunk from 'modules/spendings/spending-list/redux/thunks/lis
 import { FC, useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { AppDispatch } from 'redux/store';
+import { SpendingOrdering } from 'modules/spendings/domain/SpendingRepository';
 
 import css from './ListFilters.module.scss';
+
+const orderingDisplayMap: { [key in SpendingOrdering]: string } = {
+    [SpendingOrdering.AMOUNT_ASCENDING]: 'Sort by Amount descending',
+    [SpendingOrdering.AMOUNT_DESCENDING]: 'Sort by Amount descending',
+    [SpendingOrdering.DATE_ASCENDING]: 'Sort by Date ascending',
+    [SpendingOrdering.DATE_DESCENDING]: 'Sort by Date descending (default)',
+};
 
 const ListFilters: FC = () => {
     const dispatch = useDispatch<AppDispatch>();
 
     const [currencyFilter, setCurrencyFilter] =
         useState<SpendingCurrency | null>(null);
-    const [orderBy, setOrderBy] = useState<
-        'spent_at' | '-spent_at' | 'amount' | '-amount'
-    >('spent_at');
+    const [orderBy, setOrderBy] = useState<SpendingOrdering>(
+        SpendingOrdering.DATE_DESCENDING,
+    );
 
     useEffect(() => {
         dispatch(
@@ -29,30 +37,27 @@ const ListFilters: FC = () => {
             <div className={css['ordering']}>
                 <select
                     onChange={(e) =>
-                        setOrderBy(
-                            e.target.value as
-                                | 'spent_at'
-                                | '-spent_at'
-                                | 'amount'
-                                | '-amount',
-                        )
+                        setOrderBy(e.target.value as SpendingOrdering)
                     }
                     value={orderBy}
                 >
-                    <option value={'spent_at'}>spent_at</option>
-                    <option value={'-spent_at'}>-spent_at</option>
-                    <option value={'amount'}>amount</option>
-                    <option value={'-amount'}>-amount</option>
+                    {Object.values(SpendingOrdering).map((ordering) => (
+                        <option key={ordering} value={ordering}>
+                            {orderingDisplayMap[ordering]}
+                        </option>
+                    ))}
                 </select>
             </div>
             <div className={css['currencyFilter']}>
                 <button onClick={() => setCurrencyFilter(null)}>All</button>
-                <button onClick={() => setCurrencyFilter(SpendingCurrency.USD)}>
-                    USD
-                </button>
-                <button onClick={() => setCurrencyFilter(SpendingCurrency.HUF)}>
-                    HUF
-                </button>
+                {Object.values(SpendingCurrency).map((currency) => (
+                    <button
+                        key={currency}
+                        onClick={() => setCurrencyFilter(currency)}
+                    >
+                        {currency}
+                    </button>
+                ))}
             </div>
         </div>
     );

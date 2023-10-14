@@ -3,6 +3,7 @@ import createSpendingThunk from 'modules/spendings/spending-list/redux/thunks/cr
 import { FC, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { AppDispatch } from 'redux/store';
+import { RemoteSpendingFactory } from 'modules/spendings/remote/RemoteSpending';
 
 import css from './NewSpendingForm.module.scss';
 
@@ -17,12 +18,13 @@ const NewSpendingForm: FC = () => {
     const handleSave = () =>
         dispatch(
             createSpendingThunk({
-                spendingToCreate: {
+                spendingToCreate: new RemoteSpendingFactory().from({
                     description,
                     amount,
                     currency,
-                    spentAt: '2023-09-04T18:58:13.359000Z',
-                },
+                    spentAt: '2023-09-04T18:58:13.359000Z', // TODO
+                    id: 0,
+                }),
                 resetForm: () => {
                     setDescription('');
                     setAmount(0);
@@ -52,8 +54,11 @@ const NewSpendingForm: FC = () => {
                 }
                 value={currency}
             >
-                <option value={'HUF'}>HUF</option>
-                <option value={'USD'}>USD</option>
+                {Object.values(SpendingCurrency).map((currency) => (
+                    <option key={currency} value={currency}>
+                        {currency}
+                    </option>
+                ))}
             </select>
 
             <button onClick={handleSave}>Save</button>

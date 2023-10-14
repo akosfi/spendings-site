@@ -3,10 +3,11 @@ import {
     SpendingCurrency,
     SpendingRepository,
 } from 'modules/spendings';
+import { SpendingOrdering } from 'modules/spendings/domain/SpendingRepository';
 
 interface ListSpendingUseCaseRequest {
     currency?: SpendingCurrency;
-    orderBy?: 'spent_at' | '-spent_at' | 'amount' | '-amount';
+    orderBy?: SpendingOrdering;
     spendingRepository: SpendingRepository;
 }
 

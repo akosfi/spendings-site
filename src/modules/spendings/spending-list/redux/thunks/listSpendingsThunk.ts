@@ -3,12 +3,13 @@ import { SpendingCurrency, SpendingDTO } from 'modules/spendings';
 import ListSpendingUseCase from '../../useCases/listSpendingsUseCase';
 import RemoteSpendingRepository from 'modules/spendings/remote/RemoteSpendingRepository';
 import axiosInstance from 'remote/axiosInstance';
+import { SpendingOrdering } from 'modules/spendings/domain/SpendingRepository';
 
 const listSpendingsThunk = createAsyncThunk<
     { spendingDTOs: SpendingDTO[] },
     {
         currency?: SpendingCurrency;
-        orderBy?: 'spent_at' | '-spent_at' | 'amount' | '-amount';
+        orderBy?: SpendingOrdering;
     },
     { rejectValue: string }
 >(

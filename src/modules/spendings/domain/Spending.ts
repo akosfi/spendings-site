@@ -11,12 +11,6 @@ export interface SpendingDTO {
     spentAt: string;
 }
 
-export interface SpendingCreationDTO
-    extends Pick<
-        SpendingDTO,
-        'amount' | 'currency' | 'description' | 'spentAt'
-    > {}
-
 export default class Spending implements SpendingDTO {
     id: number;
     description: string;

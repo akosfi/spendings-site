@@ -1,33 +1,29 @@
 import { AxiosInstance, AxiosResponse } from 'axios';
-import { SpendingCreationDTO, SpendingCurrency } from '../domain/Spending';
-import SpendingRepository from '../domain/SpendingRepository';
-import { RemoteSpendingFactory } from './RemoteSpending';
-
-interface APISpendingDTO {
-    id: number;
-    description: string;
-    amount: number;
-    currency: SpendingCurrency;
-    spent_at: string;
-}
+import Spending, { SpendingCurrency } from '../domain/Spending';
+import SpendingRepository, {
+    SpendingOrdering,
+} from '../domain/SpendingRepository';
+import { RemoteSpendingDTO, RemoteSpendingFactory } from './RemoteSpending';
 
 export default class RemoteSpendingRepository implements SpendingRepository {
     constructor(private readonly axiosInstance: AxiosInstance) {}
 
-    create = async (spendingToCreate: SpendingCreationDTO) => {
-        const { data: spending }: AxiosResponse<APISpendingDTO> =
+    create = async (spending: Spending) => {
+        const { data: createdSpending }: AxiosResponse<RemoteSpendingDTO> =
             await this.axiosInstance.post('/spendings/', {
-                description: spendingToCreate.description,
-                amount: spendingToCreate.amount,
-                currency: spendingToCreate.currency,
-                spent_at: spendingToCreate.spentAt,
+                description: spending.description,
+                amount: spending.amount,
+                currency: spending.currency,
+                spent_at: spending.spentAt,
             });
-        return new RemoteSpendingFactory().fromRemoteSpendingDTO(spending);
+        return new RemoteSpendingFactory().fromRemoteSpendingDTO(
+            createdSpending,
+        );
     };
 
     listSpendings = async (
         currency?: SpendingCurrency,
-        orderBy?: 'amount' | 'spent_at' | '-spent_at' | '-amount',
+        orderBy?: SpendingOrdering,
     ) => {
         const urlSearchParams = new URLSearchParams();
         if (currency) {
@@ -37,7 +33,7 @@ export default class RemoteSpendingRepository implements SpendingRepository {
             urlSearchParams.append('orderBy', orderBy);
         }
 
-        const { data: spendings }: AxiosResponse<APISpendingDTO[]> =
+        const { data: spendings }: AxiosResponse<RemoteSpendingDTO[]> =
             await this.axiosInstance.get(
                 `/spendings/?${urlSearchParams.toString()}`,
             );
