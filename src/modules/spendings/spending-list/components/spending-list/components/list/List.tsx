@@ -5,6 +5,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { AppDispatch } from 'redux/store';
 
 import css from './List.module.scss';
+import ListItem from './components/list-item/ListItem';
 
 const List: FC = () => {
     const dispatch = useDispatch<AppDispatch>();
@@ -17,21 +18,7 @@ const List: FC = () => {
     return (
         <div className={css['list']}>
             {spendings.map((spending) => (
-                <div className={css['list-item']} key={spending.id}>
-                    <div className={css['icon-container']}>
-                        <div className={css['icon']}>$</div>
-                    </div>
-
-                    <div className={css['information']}>
-                        <p className={css['description']}>
-                            {spending.description}
-                        </p>
-                        <p>{spending.spentAt}</p>
-                    </div>
-                    <div />
-                    <div className={css['amount']}>{spending.amount}</div>
-                    <div className={css['actions']}>actions</div>
-                </div>
+                <ListItem key={spending.id} spending={spending} />
             ))}
         </div>
     );
