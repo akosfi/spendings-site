@@ -1,0 +1,11 @@
+.filters {
+    display: grid;
+
+    grid-template-columns: 35% 25%;
+    justify-content: space-between;
+
+    .currencyFilter {
+        display: flex;
+        justify-content: space-between;
+    }
+}

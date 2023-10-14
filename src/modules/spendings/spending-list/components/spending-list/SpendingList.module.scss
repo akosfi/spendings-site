@@ -1,0 +1,19 @@
+@import '../../../../../styles/breakpoints.scss';
+
+.content {
+    width: 100%;
+    margin: 24px 16px 0 16px;
+
+    @include tablet-up {
+        width: 80%;
+        margin: 24px auto 0 auto;
+    }
+
+    @include small-desktop-up {
+        width: 50%;
+    }
+
+    @include large-desktop-up {
+        width: 40%;
+    }
+}

@@ -1,0 +1,6 @@
+@import '../../../../../../../styles/breakpoints.scss';
+
+.form {
+    display: grid;
+    grid-template-columns: 60% 20% 10% 10%;
+}
