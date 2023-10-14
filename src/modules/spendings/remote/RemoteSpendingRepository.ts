@@ -23,14 +23,14 @@ export default class RemoteSpendingRepository implements SpendingRepository {
 
     listSpendings = async (
         currency?: SpendingCurrency,
-        orderBy?: SpendingOrdering,
+        order?: SpendingOrdering,
     ) => {
         const urlSearchParams = new URLSearchParams();
         if (currency) {
             urlSearchParams.append('currency', currency);
         }
-        if (orderBy) {
-            urlSearchParams.append('order', orderBy);
+        if (order) {
+            urlSearchParams.append('order', order);
         }
 
         const { data: spendings }: AxiosResponse<RemoteSpendingDTO[]> =

@@ -9,25 +9,22 @@ const listSpendingsThunk = createAsyncThunk<
     { spendingDTOs: SpendingDTO[] },
     {
         currency?: SpendingCurrency;
-        orderBy?: SpendingOrdering;
+        order?: SpendingOrdering;
     },
     { rejectValue: string }
->(
-    'spendingList/listSpendingsThunk',
-    async ({ orderBy, currency }, thunkAPI) => {
-        try {
-            const { spendings } = await new ListSpendingUseCase({
-                spendingRepository: new RemoteSpendingRepository(axiosInstance),
-                orderBy,
-                currency,
-            }).execute();
-            return {
-                spendingDTOs: spendings.map((spending) => spending.serialize()),
-            };
-        } catch (error) {
-            return thunkAPI.rejectWithValue('Failed to list spendings.');
-        }
-    },
-);
+>('spendingList/listSpendingsThunk', async ({ order, currency }, thunkAPI) => {
+    try {
+        const { spendings } = await new ListSpendingUseCase({
+            spendingRepository: new RemoteSpendingRepository(axiosInstance),
+            order,
+            currency,
+        }).execute();
+        return {
+            spendingDTOs: spendings.map((spending) => spending.serialize()),
+        };
+    } catch (error) {
+        return thunkAPI.rejectWithValue('Failed to list spendings.');
+    }
+});
 
 export default listSpendingsThunk;

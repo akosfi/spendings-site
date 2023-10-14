@@ -12,8 +12,8 @@ import css from './ListFilters.module.scss';
 const orderingDisplayMap: { [key in SpendingOrdering]: string } = {
     [SpendingOrdering.AMOUNT_ASCENDING]: 'Sort by Amount ascending',
     [SpendingOrdering.AMOUNT_DESCENDING]: 'Sort by Amount descending',
-    [SpendingOrdering.DATE_ASCENDING]: 'Sort by Date ascending',
-    [SpendingOrdering.DATE_DESCENDING]: 'Sort by Date descending (default)',
+    [SpendingOrdering.SPENT_AT_ASCENDING]: 'Sort by Date ascending',
+    [SpendingOrdering.SPENT_AT_DESCENDING]: 'Sort by Date descending (default)',
 };
 
 const orderingOptions: SelectOption[] = Object.values(SpendingOrdering).map(
@@ -25,27 +25,27 @@ const ListFilters: FC = () => {
 
     const [currencyFilter, setCurrencyFilter] =
         useState<SpendingCurrency | null>(null);
-    const [orderBy, setOrderBy] = useState<SpendingOrdering>(
-        SpendingOrdering.DATE_DESCENDING,
+    const [order, setOrder] = useState<SpendingOrdering>(
+        SpendingOrdering.SPENT_AT_DESCENDING,
     );
 
     useEffect(() => {
         dispatch(
             listSpendingsThunk({
                 currency: currencyFilter === null ? undefined : currencyFilter,
-                orderBy,
+                order,
             }),
         );
-    }, [currencyFilter, orderBy, dispatch]);
+    }, [currencyFilter, order, dispatch]);
 
     return (
         <div className={css['filters']}>
             <div className={css['ordering']}>
                 <SelectInput
-                    value={orderBy}
+                    value={order}
                     options={orderingOptions}
                     setValue={(option) =>
-                        setOrderBy(option.id as SpendingOrdering)
+                        setOrder(option.id as SpendingOrdering)
                     }
                 />
             </div>

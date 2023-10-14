@@ -7,7 +7,7 @@ import { SpendingOrdering } from 'modules/spendings/domain/SpendingRepository';
 
 interface ListSpendingUseCaseRequest {
     currency?: SpendingCurrency;
-    orderBy?: SpendingOrdering;
+    order?: SpendingOrdering;
     spendingRepository: SpendingRepository;
 }
 
@@ -21,11 +21,11 @@ export default class ListSpendingUseCase {
     ) {}
 
     execute = async (): Promise<ListSpendingUseCaseResponse> => {
-        const { spendingRepository, currency, orderBy } =
+        const { spendingRepository, currency, order } =
             this.listSpendingUseCaseRequest;
         const spendings = await spendingRepository.listSpendings(
             currency,
-            orderBy,
+            order,
         );
         return { spendings };
     };
