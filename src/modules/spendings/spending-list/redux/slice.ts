@@ -36,6 +36,7 @@ const speningListSlice = createSlice({
             ) => {
                 state.spendings = spendingDTOs;
                 state.isLoading = false;
+                state.error = 'asd';
             },
         );
 
