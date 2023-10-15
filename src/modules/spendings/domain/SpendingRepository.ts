@@ -1,8 +1,8 @@
 import Spending, { SpendingCurrency } from './Spending';
 
 export enum SpendingOrdering {
-    SPENT_AT_DESCENDING = '-date',
-    SPENT_AT_ASCENDING = 'date',
+    SPENT_AT_DESCENDING = '-spent_at',
+    SPENT_AT_ASCENDING = 'spent_at',
     AMOUNT_DESCENDING = '-amount',
     AMOUNT_ASCENDING = 'amount',
 }
