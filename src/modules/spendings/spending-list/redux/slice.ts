@@ -83,10 +83,10 @@ const speningListSlice = createSlice({
             (
                 state,
                 {
-                    payload: { spendingDTO },
-                }: PayloadAction<{ spendingDTO: SpendingDTO }>,
+                    payload: { spendingDTOs },
+                }: PayloadAction<{ spendingDTOs: SpendingDTO[] }>,
             ) => {
-                state.spendings = [...state.spendings, spendingDTO];
+                state.spendings = spendingDTOs;
                 state.isLoading = false;
             },
         );

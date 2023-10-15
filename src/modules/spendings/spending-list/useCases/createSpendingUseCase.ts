@@ -1,12 +1,19 @@
-import { Spending, SpendingRepository } from 'modules/spendings';
+import {
+    Spending,
+    SpendingCurrency,
+    SpendingOrdering,
+    SpendingRepository,
+} from 'modules/spendings';
 
 interface CreateSpendingUseCaseRequest {
     spendingToCreate: Spending;
     spendingRepository: SpendingRepository;
+    currentOrdering: SpendingOrdering;
+    currentCurrency: SpendingCurrency | null;
 }
 
 interface CreateSpendingUseCaseResponse {
-    spending: Spending;
+    spendings: Spending[];
 }
 
 export default class CreateSpendingUseCase {
@@ -15,9 +22,17 @@ export default class CreateSpendingUseCase {
     ) {}
 
     execute = async (): Promise<CreateSpendingUseCaseResponse> => {
-        const { spendingRepository, spendingToCreate } =
-            this.createSpendingUseCaseRequest;
-        const spending = await spendingRepository.create(spendingToCreate);
-        return { spending };
+        const {
+            spendingRepository,
+            spendingToCreate,
+            currentCurrency,
+            currentOrdering,
+        } = this.createSpendingUseCaseRequest;
+        await spendingRepository.create(spendingToCreate);
+        const spendings = await spendingRepository.listSpendings(
+            currentCurrency,
+            currentOrdering,
+        );
+        return { spendings };
     };
 }
