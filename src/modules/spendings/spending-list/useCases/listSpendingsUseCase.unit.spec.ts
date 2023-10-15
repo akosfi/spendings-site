@@ -1,9 +1,9 @@
 import { SpendingCurrency } from 'modules/spendings';
-import { MockedSpendingFactory } from 'modules/spendings/mock/MockSpending';
-import MockedSpendingRepository from 'modules/spendings/mock/MockedSpendingRepository';
+import { InMemorySpendingFactory } from 'modules/spendings/inMemory/InMemorySpending';
+import InMemorySpendingRepository from 'modules/spendings/inMemory/InMemorySpendingRepository';
 import ListSpendingUseCase from './listSpendingsUseCase';
 
-const spending1 = new MockedSpendingFactory().from({
+const spending1 = new InMemorySpendingFactory().from({
     id: 1,
     description: 'x1',
     amount: 10,
@@ -11,7 +11,7 @@ const spending1 = new MockedSpendingFactory().from({
     spentAt: 'x',
 });
 
-const spending2 = new MockedSpendingFactory().from({
+const spending2 = new InMemorySpendingFactory().from({
     id: 2,
     description: 'x2',
     amount: 100,
@@ -19,7 +19,10 @@ const spending2 = new MockedSpendingFactory().from({
     spentAt: 'x',
 });
 
-const spendingRepository = new MockedSpendingRepository([spending1, spending2]);
+const spendingRepository = new InMemorySpendingRepository([
+    spending1,
+    spending2,
+]);
 
 describe('ListSpendingsUseCase', () => {
     test('Test listing spendings, with already existing spendings, expect spendings to be returned.', async () => {

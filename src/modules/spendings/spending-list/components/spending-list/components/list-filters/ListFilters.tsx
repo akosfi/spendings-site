@@ -1,4 +1,4 @@
-import { SpendingCurrency } from 'modules/spendings';
+import { SpendingCurrency, useSpendingContext } from 'modules/spendings';
 import listSpendingsThunk from 'modules/spendings/spending-list/redux/thunks/listSpendingsThunk';
 import { FC, useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
@@ -21,6 +21,8 @@ const orderingOptions: SelectOption[] = Object.values(SpendingOrdering).map(
 );
 
 const ListFilters: FC = () => {
+    const { spendingRepository } = useSpendingContext();
+
     const dispatch = useDispatch<AppDispatch>();
 
     const [currencyFilter, setCurrencyFilter] =
@@ -32,11 +34,12 @@ const ListFilters: FC = () => {
     useEffect(() => {
         dispatch(
             listSpendingsThunk({
+                spendingRepository,
                 currency: currencyFilter === null ? undefined : currencyFilter,
                 order,
             }),
         );
-    }, [currencyFilter, order, dispatch]);
+    }, [currencyFilter, order, dispatch, spendingRepository]);
 
     return (
         <div className={css['filters']}>

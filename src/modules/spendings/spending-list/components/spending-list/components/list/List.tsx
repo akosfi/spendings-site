@@ -6,15 +6,19 @@ import { AppDispatch } from 'redux/store';
 
 import css from './List.module.scss';
 import ListItem from './components/list-item/ListItem';
+import useSpendingContext from 'modules/spendings/context/useSpendingContext';
 
 const List: FC = () => {
+    const { spendingRepository, spendingFactory } = useSpendingContext();
     const dispatch = useDispatch<AppDispatch>();
-    const spendings = useSelector(spendingListSelectors.getSpendings);
+    const spendings = useSelector((state) =>
+        spendingListSelectors.getSpendings(state, spendingFactory),
+    );
     const isLoading = useSelector(spendingListSelectors.getIsLoading);
 
     useEffect(() => {
-        dispatch(listSpendingsThunk({}));
-    }, [dispatch]);
+        dispatch(listSpendingsThunk({ spendingRepository }));
+    }, [dispatch, spendingRepository]);
 
     const listFragment = useMemo(() => {
         if (isLoading) {
