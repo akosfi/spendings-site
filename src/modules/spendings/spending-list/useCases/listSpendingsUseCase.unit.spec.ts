@@ -1,9 +1,11 @@
-import { SpendingCurrency } from 'modules/spendings';
-import { InMemorySpendingFactory } from 'modules/spendings/inMemory/InMemorySpending';
-import InMemorySpendingRepository from 'modules/spendings/inMemory/InMemorySpendingRepository';
+import { SpendingCurrency, SpendingOrdering } from 'modules/spendings';
+import { MockSpendingFactory } from 'modules/spendings/mock/MockSpending';
+import MockSpendingRepository, {
+    mockListSpendings,
+} from 'modules/spendings/mock/MockSpendingRepository';
 import ListSpendingUseCase from './listSpendingsUseCase';
 
-const spending1 = new InMemorySpendingFactory().from({
+const spending1 = new MockSpendingFactory().from({
     id: 1,
     description: 'x1',
     amount: 10,
@@ -11,7 +13,7 @@ const spending1 = new InMemorySpendingFactory().from({
     spentAt: 'x',
 });
 
-const spending2 = new InMemorySpendingFactory().from({
+const spending2 = new MockSpendingFactory().from({
     id: 2,
     description: 'x2',
     amount: 100,
@@ -19,15 +21,18 @@ const spending2 = new InMemorySpendingFactory().from({
     spentAt: 'x',
 });
 
-const spendingRepository = new InMemorySpendingRepository([
-    spending1,
-    spending2,
-]);
+afterEach(() => {
+    jest.restoreAllMocks();
+});
 
 describe('ListSpendingsUseCase', () => {
     test('Test listing spendings, with already existing spendings, expect spendings to be returned.', async () => {
+        mockListSpendings.mockResolvedValue([spending1, spending2]);
+
         const { spendings } = await new ListSpendingUseCase({
-            spendingRepository,
+            spendingRepository: MockSpendingRepository(),
+            order: SpendingOrdering.SPENT_AT_DESCENDING,
+            currency: null,
         }).execute();
         expect(spendings).toEqual([spending1, spending2]);
     });

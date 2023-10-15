@@ -7,28 +7,26 @@ import {
 import '@testing-library/jest-dom';
 import { Provider } from 'react-redux';
 import SpendingContext from 'modules/spendings/context/SpendingProvider';
-import { InMemorySpendingFactory } from 'modules/spendings/inMemory/InMemorySpending';
-import InMemorySpendingRepository from 'modules/spendings/inMemory/InMemorySpendingRepository';
-import { store } from 'redux/store';
+import { MockSpendingFactory } from 'modules/spendings/mock/MockSpending';
+import MockSpendingRepository, {
+    mockListSpendings,
+} from 'modules/spendings/mock/MockSpendingRepository';
 import List from './List';
-import { SpendingDTO, SpendingCurrency } from 'modules/spendings';
+import { SpendingCurrency } from 'modules/spendings';
+import { createStore } from 'redux/store';
 
-const spendingDTO: SpendingDTO = {
-    id: 1,
-    description: 'Example description',
+const spending1 = new MockSpendingFactory().from({
     amount: 10,
     currency: SpendingCurrency.USD,
     spentAt: new Date().toISOString(),
-};
-
-const spending1 = new InMemorySpendingFactory().from({
-    ...spendingDTO,
     id: 1,
     description: 'First description',
 });
 
-const spending2 = new InMemorySpendingFactory().from({
-    ...spendingDTO,
+const spending2 = new MockSpendingFactory().from({
+    amount: 10,
+    currency: SpendingCurrency.USD,
+    spentAt: new Date().toISOString(),
     id: 2,
     description: 'Second description',
 });
@@ -39,11 +37,12 @@ afterEach(() => {
 
 describe('List', () => {
     test('Test displaying spendings, with existing spendings in storage, expect spending to be visible.', async () => {
-        const spendingRepository = new InMemorySpendingRepository([
-            spending1,
-            spending2,
-        ]);
-        const spendingFactory = new InMemorySpendingFactory();
+        mockListSpendings.mockResolvedValue([spending1, spending2]);
+
+        const spendingRepository = MockSpendingRepository();
+        const spendingFactory = new MockSpendingFactory();
+        const store = createStore();
+
         render(
             <SpendingContext
                 spendingContextValue={{ spendingFactory, spendingRepository }}
@@ -66,8 +65,10 @@ describe('List', () => {
     });
 
     test('Test displaying spendings, with zero spendings in storage, expect no spending to be visible.', async () => {
-        const spendingRepository = new InMemorySpendingRepository();
-        const spendingFactory = new InMemorySpendingFactory();
+        mockListSpendings.mockResolvedValue([]);
+        const spendingRepository = MockSpendingRepository();
+        const spendingFactory = new MockSpendingFactory();
+        const store = createStore();
         render(
             <SpendingContext
                 spendingContextValue={{ spendingFactory, spendingRepository }}

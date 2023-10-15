@@ -35,6 +35,6 @@ export default class Spending implements SpendingDTO {
     });
 }
 
-export interface SpendingFactory {
-    from: (spendingDTO: SpendingDTO) => Spending;
+export class SpendingFactory {
+    from = (spendingDTO: SpendingDTO) => new Spending(spendingDTO);
 }

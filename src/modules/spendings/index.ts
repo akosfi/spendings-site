@@ -10,3 +10,4 @@ export {
 export { type default as RemoteSpeningRepository } from './remote/RemoteSpendingRepository';
 export { default as SpendingContextProvider } from './context/SpendingProvider';
 export { default as useSpendingContext } from './context/useSpendingContext';
+export { type SpendingContextType } from './context/spendingContext';

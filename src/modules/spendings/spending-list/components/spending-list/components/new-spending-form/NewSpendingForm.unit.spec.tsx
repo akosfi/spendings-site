@@ -1,12 +1,15 @@
-import { render, screen } from '@testing-library/react';
+import { render, screen, waitFor } from '@testing-library/react';
 import '@testing-library/jest-dom';
 import userEvent from '@testing-library/user-event';
 import { Provider } from 'react-redux';
 import SpendingContext from 'modules/spendings/context/SpendingProvider';
-import { InMemorySpendingFactory } from 'modules/spendings/inMemory/InMemorySpending';
-import InMemorySpendingRepository from 'modules/spendings/inMemory/InMemorySpendingRepository';
-import { store } from 'redux/store';
+import { MockSpendingFactory } from 'modules/spendings/mock/MockSpending';
+import MockSpendingRepository, {
+    mockListSpendings,
+} from 'modules/spendings/mock/MockSpendingRepository';
+import { createStore } from 'redux/store';
 import NewSpendingForm from './NewSpendingForm';
+import { SpendingCurrency } from 'modules/spendings/domain/Spending';
 
 afterEach(() => {
     jest.restoreAllMocks();
@@ -14,13 +17,17 @@ afterEach(() => {
 
 describe('NewSpendingForm', () => {
     test('Test adding a new spending, with valid inputs, expect creation to be started.', async () => {
-        const spendingRepository = new InMemorySpendingRepository();
-        const spendingFactory = new InMemorySpendingFactory();
-
-        const spiedSpendingRepositoryCreate = jest.spyOn(
-            spendingRepository,
-            'create',
-        );
+        const spendingToCreate = new MockSpendingFactory().from({
+            id: 1,
+            amount: 1000,
+            description: 'Example description',
+            spentAt: new Date().toISOString(),
+            currency: SpendingCurrency.HUF,
+        });
+        mockListSpendings.mockResolvedValue([spendingToCreate]);
+        const spendingRepository = MockSpendingRepository();
+        const spendingFactory = new MockSpendingFactory();
+        const store = createStore();
 
         render(
             <SpendingContext
@@ -34,21 +41,33 @@ describe('NewSpendingForm', () => {
 
         await userEvent.type(
             screen.getByTestId('newSpendingForm/description'),
-            'Example description',
+            spendingToCreate.description,
         );
         await userEvent.type(
             screen.getByTestId('newSpendingForm/amount'),
-            '1000',
+            String(spendingToCreate.amount),
         );
 
         await userEvent.click(screen.getByTestId('newSpendingForm/saveButton'));
 
-        expect(spiedSpendingRepositoryCreate).toHaveBeenCalled();
+        await waitFor(() =>
+            expect(
+                screen.getByTestId('newSpendingForm/description'),
+            ).toHaveTextContent(''),
+        );
+
+        expect(store.getState().spendingList.spendings.length).toBe(1);
+        expect(store.getState().spendingList.spendings[0].description).toBe(
+            spendingToCreate.description,
+        );
     });
 
     test('Test adding a new spending, with invalid inputs, expect creation not to be started.', async () => {
-        const spendingRepository = new InMemorySpendingRepository();
-        const spendingFactory = new InMemorySpendingFactory();
+        const spendingRepository = MockSpendingRepository();
+        const spendingFactory = new MockSpendingFactory();
+
+        const store = createStore();
+
         render(
             <SpendingContext
                 spendingContextValue={{ spendingFactory, spendingRepository }}
@@ -59,13 +78,8 @@ describe('NewSpendingForm', () => {
             </SpendingContext>,
         );
 
-        const spiedSpendingRepositoryCreate = jest.spyOn(
-            spendingRepository,
-            'create',
-        );
-
         await userEvent.click(screen.getByTestId('newSpendingForm/saveButton'));
 
-        expect(spiedSpendingRepositoryCreate).not.toHaveBeenCalled();
+        expect(store.getState().spendingList.spendings.length).not.toBeTruthy();
     });
 });
