@@ -48,12 +48,14 @@ const NewSpendingForm: FC = () => {
                 value={description}
                 setValue={setDescription}
                 placeholder="description"
+                testId="newSpendingForm/description"
             />
             <TextInput
                 type="number"
                 value={String(amount)}
                 setValue={(value) => setAmount(Number(value))}
                 placeholder="0"
+                testId="newSpendingForm/amount"
             />
 
             <SelectInput
@@ -62,9 +64,15 @@ const NewSpendingForm: FC = () => {
                 setValue={(option) =>
                     setCurrency(option.id as SpendingCurrency)
                 }
+                testId="newSpendingForm/currency"
             />
 
-            <Button label="Save" onClick={handleSave} disabled={!description} />
+            <Button
+                label="Save"
+                onClick={handleSave}
+                disabled={!description}
+                testId="newSpendingForm/saveButton"
+            />
         </div>
     );
 };

@@ -36,7 +36,12 @@ const ListItem: FC<ListItemProps> = ({ spending }) => {
             </div>
 
             <div className={css['information']}>
-                <p className={css['description']}>{formattedDescription}</p>
+                <p
+                    className={css['description']}
+                    data-testid="ListItem/description"
+                >
+                    {formattedDescription}
+                </p>
                 <p className={css['spentAtDate']}>{formattedSpentAtDate}</p>
             </div>
             <div />

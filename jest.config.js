@@ -11,12 +11,12 @@ module.exports = {
     ],
     moduleNameMapper: {
         '^.+\\.module\\.(css|sass|scss)$': 'identity-obj-proxy',
-
         '^.+\\.(css|sass|scss)$': '<rootDir>/__mocks__/styleMock.js',
-
         '^.+\\.(png|jpg|jpeg|gif|webp|avif|ico|bmp|svg)$/i': `<rootDir>/__mocks__/fileMock.js`,
-
         '^modules/(.*)$': '<rootDir>/src/modules/$1',
+        '^remote/(.*)$': '<rootDir>/src/remote/$1',
+        '^redux/(.*)$': '<rootDir>/src/redux/$1',
+        '^test/(.*)$': '<rootDir>/src/test/$1',
     },
     testPathIgnorePatterns: ['<rootDir>/node_modules/', '<rootDir>/.next/'],
     testEnvironment: 'jsdom',

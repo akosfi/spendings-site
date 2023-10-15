@@ -23,13 +23,19 @@ const List: FC = () => {
     const listFragment = useMemo(() => {
         if (isLoading) {
             return (
-                <div className={css['spinner-area']}>
-                    <span className={css['spinner']} />
+                <div
+                    className={css['spinner-area']}
+                    data-testid="List/container"
+                >
+                    <span
+                        className={css['spinner']}
+                        data-testid="List/spinner"
+                    />
                 </div>
             );
         }
         return (
-            <div>
+            <div data-testid="List/container">
                 {spendings.map((spending) => (
                     <ListItem key={spending.id} spending={spending} />
                 ))}

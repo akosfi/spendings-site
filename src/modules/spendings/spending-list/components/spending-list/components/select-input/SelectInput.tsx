@@ -11,9 +11,15 @@ type SelectInputProps = {
     value: string;
     options: SelectOption[];
     setValue: (option: SelectOption) => void;
+    testId?: string;
 };
 
-const SelectInput: FC<SelectInputProps> = ({ value, options, setValue }) => (
+const SelectInput: FC<SelectInputProps> = ({
+    value,
+    options,
+    setValue,
+    testId,
+}) => (
     <select
         onChange={(e) => {
             const selectedOption = options.find(
@@ -26,6 +32,7 @@ const SelectInput: FC<SelectInputProps> = ({ value, options, setValue }) => (
         }}
         value={value}
         className={css['select']}
+        data-testid={testId}
     >
         {options.map((option) => (
             <option key={option.id} value={option.id}>
