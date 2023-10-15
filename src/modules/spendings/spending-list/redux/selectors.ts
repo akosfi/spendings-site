@@ -16,10 +16,13 @@ const getIsLoading = (state: RootState) => getState(state).isLoading;
 
 const getError = (state: RootState) => getState(state).error;
 
+const getFilters = (state: RootState) => getState(state).filters;
+
 const spendingListSelectors = {
     getSpendings,
     getIsLoading,
     getError,
+    getFilters,
 };
 
 export default spendingListSelectors;

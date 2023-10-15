@@ -11,8 +11,8 @@ const listSpendingsThunk = createAsyncThunk<
     { spendingDTOs: SpendingDTO[] },
     {
         spendingRepository: SpendingRepository;
-        currency?: SpendingCurrency;
-        order?: SpendingOrdering;
+        currency: SpendingCurrency | null;
+        order: SpendingOrdering;
     },
     { rejectValue: string }
 >(

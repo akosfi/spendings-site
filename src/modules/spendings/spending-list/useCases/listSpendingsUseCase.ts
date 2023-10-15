@@ -6,8 +6,8 @@ import {
 import { SpendingOrdering } from 'modules/spendings/domain/SpendingRepository';
 
 interface ListSpendingUseCaseRequest {
-    currency?: SpendingCurrency;
-    order?: SpendingOrdering;
+    currency: SpendingCurrency | null;
+    order: SpendingOrdering;
     spendingRepository: SpendingRepository;
 }
 

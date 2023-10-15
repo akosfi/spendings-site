@@ -9,8 +9,8 @@ export enum SpendingOrdering {
 
 export default interface SpendingRepository {
     listSpendings: (
-        currency?: SpendingCurrency,
-        order?: SpendingOrdering,
+        currency: SpendingCurrency | null,
+        order: SpendingOrdering,
     ) => Promise<Spending[]>;
     create: (spending: Spending) => Promise<Spending>;
 }

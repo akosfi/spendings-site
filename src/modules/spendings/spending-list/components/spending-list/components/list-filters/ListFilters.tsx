@@ -1,11 +1,12 @@
-import { SpendingCurrency, useSpendingContext } from 'modules/spendings';
-import listSpendingsThunk from 'modules/spendings/spending-list/redux/thunks/listSpendingsThunk';
-import { FC, useEffect, useState } from 'react';
-import { useDispatch } from 'react-redux';
+import { SpendingCurrency } from 'modules/spendings';
+import { FC, memo } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import { AppDispatch } from 'redux/store';
 import { SpendingOrdering } from 'modules/spendings/domain/SpendingRepository';
 import SelectInput, { SelectOption } from '../select-input/SelectInput';
 import Toggle from './components/toggle/Toggle';
+import { spendingListActions } from 'modules/spendings/spending-list/redux/slice';
+import spendingListSelectors from 'modules/spendings/spending-list/redux/selectors';
 
 import css from './ListFilters.module.scss';
 
@@ -21,49 +22,39 @@ const orderingOptions: SelectOption[] = Object.values(SpendingOrdering).map(
 );
 
 const ListFilters: FC = () => {
-    const { spendingRepository } = useSpendingContext();
-
     const dispatch = useDispatch<AppDispatch>();
+    const filters = useSelector(spendingListSelectors.getFilters);
 
-    const [currencyFilter, setCurrencyFilter] =
-        useState<SpendingCurrency | null>(null);
-    const [order, setOrder] = useState<SpendingOrdering>(
-        SpendingOrdering.SPENT_AT_DESCENDING,
-    );
-
-    useEffect(() => {
-        dispatch(
-            listSpendingsThunk({
-                spendingRepository,
-                currency: currencyFilter === null ? undefined : currencyFilter,
-                order,
-            }),
-        );
-    }, [currencyFilter, order, dispatch, spendingRepository]);
+    const handleCurrencyFilterChange = (currency: SpendingCurrency | null) =>
+        dispatch(spendingListActions.setCurrencyFilter({ currency }));
+    const handleOrderingFilterChange = (ordering: SpendingOrdering) =>
+        dispatch(spendingListActions.setOrderingFilter({ ordering }));
 
     return (
         <div className={css['filters']}>
             <div className={css['ordering']}>
                 <SelectInput
-                    value={order}
+                    value={filters.ordering}
                     options={orderingOptions}
                     setValue={(option) =>
-                        setOrder(option.id as SpendingOrdering)
+                        handleOrderingFilterChange(
+                            option.id as SpendingOrdering,
+                        )
                     }
                 />
             </div>
             <div className={css['currencyFilter']}>
                 <Toggle
-                    onClick={() => setCurrencyFilter(null)}
+                    onClick={() => handleCurrencyFilterChange(null)}
                     label="All"
-                    isActive={currencyFilter === null}
+                    isActive={filters.currency === null}
                 />
                 {Object.values(SpendingCurrency).map((currency) => (
                     <Toggle
                         key={currency}
-                        onClick={() => setCurrencyFilter(currency)}
+                        onClick={() => handleCurrencyFilterChange(currency)}
                         label={currency}
-                        isActive={currencyFilter === currency}
+                        isActive={filters.currency === currency}
                     />
                 ))}
             </div>
@@ -71,4 +62,4 @@ const ListFilters: FC = () => {
     );
 };
 
-export default ListFilters;
+export default memo(ListFilters);

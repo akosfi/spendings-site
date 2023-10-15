@@ -3,10 +3,10 @@ import listSpendingsThunk from 'modules/spendings/spending-list/redux/thunks/lis
 import { FC, useEffect, useMemo } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { AppDispatch } from 'redux/store';
+import { useSpendingContext } from 'modules/spendings';
 
 import css from './List.module.scss';
 import ListItem from './components/list-item/ListItem';
-import useSpendingContext from 'modules/spendings/context/useSpendingContext';
 
 const List: FC = () => {
     const { spendingRepository, spendingFactory } = useSpendingContext();
@@ -15,10 +15,17 @@ const List: FC = () => {
         spendingListSelectors.getSpendings(state, spendingFactory),
     );
     const isLoading = useSelector(spendingListSelectors.getIsLoading);
+    const filters = useSelector(spendingListSelectors.getFilters);
 
     useEffect(() => {
-        dispatch(listSpendingsThunk({ spendingRepository }));
-    }, [dispatch, spendingRepository]);
+        dispatch(
+            listSpendingsThunk({
+                spendingRepository,
+                order: filters.ordering,
+                currency: filters.currency,
+            }),
+        );
+    }, [dispatch, spendingRepository, filters]);
 
     const listFragment = useMemo(() => {
         if (isLoading) {

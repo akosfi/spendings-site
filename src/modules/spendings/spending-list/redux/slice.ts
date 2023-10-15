@@ -1,5 +1,9 @@
 import { PayloadAction, createSlice } from '@reduxjs/toolkit';
-import { SpendingDTO } from 'modules/spendings/domain/Spending';
+import {
+    SpendingCurrency,
+    SpendingDTO,
+    SpendingOrdering,
+} from 'modules/spendings';
 import listSpendingsThunk from './thunks/listSpendingsThunk';
 import createSpendingThunk from './thunks/createSpendingThunk';
 
@@ -7,18 +11,43 @@ interface SpeningListState {
     spendings: SpendingDTO[];
     isLoading: boolean;
     error?: string;
+    filters: {
+        currency: SpendingCurrency | null;
+        ordering: SpendingOrdering;
+    };
 }
 
 const initialState: SpeningListState = {
     spendings: [],
     isLoading: false,
     error: undefined,
+    filters: {
+        currency: null,
+        ordering: SpendingOrdering.SPENT_AT_DESCENDING,
+    },
 };
 
 const speningListSlice = createSlice({
     name: 'speningListSlice',
     initialState,
-    reducers: {},
+    reducers: {
+        setCurrencyFilter(
+            state,
+            {
+                payload: { currency },
+            }: PayloadAction<{ currency: SpendingCurrency | null }>,
+        ) {
+            state.filters.currency = currency;
+        },
+        setOrderingFilter(
+            state,
+            {
+                payload: { ordering },
+            }: PayloadAction<{ ordering: SpendingOrdering }>,
+        ) {
+            state.filters.ordering = ordering;
+        },
+    },
     extraReducers: (builder) => {
         builder.addCase(listSpendingsThunk.pending, (state) => {
             state.spendings = [];
@@ -68,5 +97,7 @@ const speningListSlice = createSlice({
         });
     },
 });
+
+export const { actions: spendingListActions } = speningListSlice;
 
 export default speningListSlice.reducer;
