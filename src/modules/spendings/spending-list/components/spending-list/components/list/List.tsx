@@ -5,13 +5,16 @@ import { useDispatch, useSelector } from 'react-redux';
 import { AppDispatch } from 'redux/store';
 import { useSpendingContext } from 'modules/spendings';
 
-import css from './List.module.scss';
 import ListItem from './components/list-item/ListItem';
 
+import css from './List.module.scss';
+
 const List: FC = () => {
-    const { spendingRepository } = useSpendingContext();
+    const { spendingRepository, spendingFactory } = useSpendingContext();
     const dispatch = useDispatch<AppDispatch>();
-    const spendings = useSelector(spendingListSelectors.getSpendings);
+    const spendings = useSelector((state) =>
+        spendingListSelectors.getSpendings(state, spendingFactory),
+    );
     const isLoading = useSelector(spendingListSelectors.getIsLoading);
     const filters = useSelector(spendingListSelectors.getFilters);
 

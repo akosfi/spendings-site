@@ -2,16 +2,13 @@ import { render, screen, waitFor } from '@testing-library/react';
 import '@testing-library/jest-dom';
 import userEvent from '@testing-library/user-event';
 import { Provider } from 'react-redux';
-import SpendingContext from 'modules/spendings/context/SpendingProvider';
 import MockSpendingRepository, {
     mockListSpendings,
 } from 'modules/spendings/mock/MockSpendingRepository';
 import { createStore } from 'redux/store';
 import NewSpendingForm from './NewSpendingForm';
-import {
-    SpendingCurrency,
-    SpendingFactory,
-} from 'modules/spendings/domain/Spending';
+import { SpendingCurrency, SpendingContextProvider } from 'modules/spendings';
+import { MockSpendingFactory } from 'modules/spendings/mock/MockSpending';
 
 afterEach(() => {
     jest.restoreAllMocks();
@@ -19,7 +16,7 @@ afterEach(() => {
 
 describe('NewSpendingForm', () => {
     test('Test adding a new spending, with valid inputs, expect creation to be started.', async () => {
-        const spendingToCreate = new SpendingFactory().from({
+        const spendingToCreate = new MockSpendingFactory().from({
             id: 1,
             amount: 1000,
             description: 'Example description',
@@ -28,14 +25,18 @@ describe('NewSpendingForm', () => {
         });
         mockListSpendings.mockResolvedValue([spendingToCreate]);
         const spendingRepository = MockSpendingRepository();
+        const spendingFactory = new MockSpendingFactory();
+
         const store = createStore();
 
         render(
-            <SpendingContext spendingContextValue={{ spendingRepository }}>
+            <SpendingContextProvider
+                spendingContextValue={{ spendingRepository, spendingFactory }}
+            >
                 <Provider store={store}>
                     <NewSpendingForm />
                 </Provider>
-            </SpendingContext>,
+            </SpendingContextProvider>,
         );
 
         await userEvent.type(
@@ -63,15 +64,17 @@ describe('NewSpendingForm', () => {
 
     test('Test adding a new spending, with invalid inputs, expect creation not to be started.', async () => {
         const spendingRepository = MockSpendingRepository();
-
+        const spendingFactory = new MockSpendingFactory();
         const store = createStore();
 
         render(
-            <SpendingContext spendingContextValue={{ spendingRepository }}>
+            <SpendingContextProvider
+                spendingContextValue={{ spendingRepository, spendingFactory }}
+            >
                 <Provider store={store}>
                     <NewSpendingForm />
                 </Provider>
-            </SpendingContext>,
+            </SpendingContextProvider>,
         );
 
         await userEvent.click(screen.getByTestId('newSpendingForm/saveButton'));

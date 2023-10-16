@@ -6,4 +6,10 @@
     color: white;
     cursor: pointer;
     box-sizing: content-box;
+
+    &:disabled {
+        background-color: rgb(146, 188, 130);
+        color: rgb(208, 208, 208);
+        cursor: unset;
+    }
 }

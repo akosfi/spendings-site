@@ -1,6 +1,6 @@
 import { Spending, SpendingCurrency, SpendingDTO } from 'modules/spendings';
 import MoneyFormatterFactory from './MoneyFormatter';
-import { SpendingFactory } from 'modules/spendings/domain/Spending';
+import { MockSpendingFactory } from 'modules/spendings/mock/MockSpending';
 
 const spendingDTO: SpendingDTO = {
     id: 1,
@@ -13,7 +13,7 @@ const spendingDTO: SpendingDTO = {
 describe('MoneyFormatter', () => {
     test.each([
         [
-            new SpendingFactory().from({
+            new MockSpendingFactory().from({
                 ...spendingDTO,
                 amount: 10,
                 currency: SpendingCurrency.USD,
@@ -21,7 +21,7 @@ describe('MoneyFormatter', () => {
             '$10.00',
         ],
         [
-            new SpendingFactory().from({
+            new MockSpendingFactory().from({
                 ...spendingDTO,
                 amount: 1000,
                 currency: SpendingCurrency.USD,
@@ -29,7 +29,7 @@ describe('MoneyFormatter', () => {
             '$1,000.00',
         ],
         [
-            new SpendingFactory().from({
+            new MockSpendingFactory().from({
                 ...spendingDTO,
                 amount: 10.1,
                 currency: SpendingCurrency.USD,
@@ -37,7 +37,7 @@ describe('MoneyFormatter', () => {
             '$10.10',
         ],
         [
-            new SpendingFactory().from({
+            new MockSpendingFactory().from({
                 ...spendingDTO,
                 amount: 1000.1,
                 currency: SpendingCurrency.USD,
@@ -45,7 +45,7 @@ describe('MoneyFormatter', () => {
             '$1,000.10',
         ],
         [
-            new SpendingFactory().from({
+            new MockSpendingFactory().from({
                 ...spendingDTO,
                 amount: 10,
                 currency: SpendingCurrency.HUF,
@@ -53,7 +53,7 @@ describe('MoneyFormatter', () => {
             '10,00\xa0Ft',
         ],
         [
-            new SpendingFactory().from({
+            new MockSpendingFactory().from({
                 ...spendingDTO,
                 amount: 10000,
                 currency: SpendingCurrency.HUF,
@@ -61,7 +61,7 @@ describe('MoneyFormatter', () => {
             '10\xa0000,00\xa0Ft',
         ],
         [
-            new SpendingFactory().from({
+            new MockSpendingFactory().from({
                 ...spendingDTO,
                 amount: 99,
                 currency: SpendingCurrency.HUF,
@@ -69,7 +69,7 @@ describe('MoneyFormatter', () => {
             '99,00\xa0Ft',
         ],
         [
-            new SpendingFactory().from({
+            new MockSpendingFactory().from({
                 ...spendingDTO,
                 amount: 10000000,
                 currency: SpendingCurrency.HUF,
@@ -93,7 +93,7 @@ describe('MoneyFormatter', () => {
 
     test.each([
         [
-            new SpendingFactory().from({
+            new MockSpendingFactory().from({
                 ...spendingDTO,
                 amount: 10,
                 currency: 'EUR' as SpendingCurrency,
@@ -101,7 +101,7 @@ describe('MoneyFormatter', () => {
             'Unknown currency. Amount:10',
         ],
         [
-            new SpendingFactory().from({
+            new MockSpendingFactory().from({
                 ...spendingDTO,
                 amount: 10000000,
                 currency: 'EUR' as SpendingCurrency,

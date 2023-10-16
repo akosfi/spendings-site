@@ -1,12 +1,9 @@
 import { AxiosInstance, AxiosResponse } from 'axios';
-import Spending, {
-    SpendingCurrency,
-    SpendingDTO,
-    SpendingFactory,
-} from '../domain/Spending';
+import Spending, { SpendingCurrency, SpendingDTO } from '../domain/Spending';
 import SpendingRepository, {
     SpendingOrdering,
 } from '../domain/SpendingRepository';
+import { RemoteSpendingFactory } from './RemoteSpending';
 
 export interface APISpendingDTO extends Omit<SpendingDTO, 'spentAt'> {
     spent_at: string;
@@ -27,7 +24,7 @@ export default class RemoteSpendingRepository implements SpendingRepository {
                 spent_at: spending.spentAt,
             },
         );
-        return new SpendingFactory().from({
+        return new RemoteSpendingFactory().from({
             id,
             amount,
             description,
@@ -53,7 +50,7 @@ export default class RemoteSpendingRepository implements SpendingRepository {
             );
         return spendings.map(
             ({ id, amount, description, currency, spent_at }) =>
-                new SpendingFactory().from({
+                new RemoteSpendingFactory().from({
                     id,
                     amount,
                     description,

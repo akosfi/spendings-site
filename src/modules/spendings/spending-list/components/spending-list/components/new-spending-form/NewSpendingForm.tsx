@@ -8,7 +8,6 @@ import Button from './components/button/Button';
 import SelectInput, { SelectOption } from '../select-input/SelectInput';
 
 import css from './NewSpendingForm.module.scss';
-import { SpendingFactory } from 'modules/spendings/domain/Spending';
 
 const currencyOptions: SelectOption[] = Object.values(SpendingCurrency).map(
     (currency) => ({ id: currency, label: currency }),
@@ -22,13 +21,13 @@ const NewSpendingForm: FC = () => {
         SpendingCurrency.USD,
     );
 
-    const { spendingRepository } = useSpendingContext();
+    const { spendingRepository, spendingFactory } = useSpendingContext();
 
     const handleSave = () =>
         dispatch(
             createSpendingThunk({
                 spendingRepository,
-                spendingToCreate: new SpendingFactory().from({
+                spendingToCreate: spendingFactory.from({
                     description,
                     amount,
                     currency,

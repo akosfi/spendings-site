@@ -2,11 +2,8 @@ import MockSpendingRepository, {
     mockListSpendings,
 } from 'modules/spendings/mock/MockSpendingRepository';
 import CreateSpendingUseCase from './createSpendingUseCase';
-import {
-    SpendingCurrency,
-    SpendingFactory,
-} from 'modules/spendings/domain/Spending';
-import { SpendingOrdering } from 'modules/spendings/domain/SpendingRepository';
+import { SpendingCurrency, SpendingOrdering } from 'modules/spendings';
+import { MockSpendingFactory } from 'modules/spendings/mock/MockSpending';
 
 afterEach(() => {
     jest.restoreAllMocks();
@@ -14,7 +11,7 @@ afterEach(() => {
 
 describe('CreateSpendingUseCase', () => {
     test('Test creating a spending, with valid spending information, expect spending to be created.', async () => {
-        const spendingToCreate = new SpendingFactory().from({
+        const spendingToCreate = new MockSpendingFactory().from({
             id: 0,
             description: 'New spending',
             amount: 1,

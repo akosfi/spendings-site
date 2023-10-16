@@ -6,16 +6,15 @@ import {
 } from '@testing-library/react';
 import '@testing-library/jest-dom';
 import { Provider } from 'react-redux';
-import SpendingContext from 'modules/spendings/context/SpendingProvider';
 import MockSpendingRepository, {
     mockListSpendings,
 } from 'modules/spendings/mock/MockSpendingRepository';
 import List from './List';
-import { SpendingCurrency } from 'modules/spendings';
+import { SpendingContextProvider, SpendingCurrency } from 'modules/spendings';
 import { createStore } from 'redux/store';
-import { SpendingFactory } from 'modules/spendings/domain/Spending';
+import { MockSpendingFactory } from 'modules/spendings/mock/MockSpending';
 
-const spending1 = new SpendingFactory().from({
+const spending1 = new MockSpendingFactory().from({
     amount: 10,
     currency: SpendingCurrency.USD,
     spentAt: new Date().toISOString(),
@@ -23,7 +22,7 @@ const spending1 = new SpendingFactory().from({
     description: 'First description',
 });
 
-const spending2 = new SpendingFactory().from({
+const spending2 = new MockSpendingFactory().from({
     amount: 10,
     currency: SpendingCurrency.USD,
     spentAt: new Date().toISOString(),
@@ -38,16 +37,18 @@ afterEach(() => {
 describe('List', () => {
     test('Test displaying spendings, with existing spendings in storage, expect spending to be visible.', async () => {
         mockListSpendings.mockResolvedValue([spending1, spending2]);
-
+        const spendingFactory = new MockSpendingFactory();
         const spendingRepository = MockSpendingRepository();
         const store = createStore();
 
         render(
-            <SpendingContext spendingContextValue={{ spendingRepository }}>
+            <SpendingContextProvider
+                spendingContextValue={{ spendingRepository, spendingFactory }}
+            >
                 <Provider store={store}>
                     <List />
                 </Provider>
-            </SpendingContext>,
+            </SpendingContextProvider>,
         );
 
         await waitForElementToBeRemoved(() =>
@@ -64,13 +65,16 @@ describe('List', () => {
     test('Test displaying spendings, with zero spendings in storage, expect no spending to be visible.', async () => {
         mockListSpendings.mockResolvedValue([]);
         const spendingRepository = MockSpendingRepository();
+        const spendingFactory = new MockSpendingFactory();
         const store = createStore();
         render(
-            <SpendingContext spendingContextValue={{ spendingRepository }}>
+            <SpendingContextProvider
+                spendingContextValue={{ spendingRepository, spendingFactory }}
+            >
                 <Provider store={store}>
                     <List />
                 </Provider>
-            </SpendingContext>,
+            </SpendingContextProvider>,
         );
 
         await waitForElementToBeRemoved(() =>
