@@ -3,13 +3,15 @@ import '@testing-library/jest-dom';
 import userEvent from '@testing-library/user-event';
 import { Provider } from 'react-redux';
 import SpendingContext from 'modules/spendings/context/SpendingProvider';
-import { MockSpendingFactory } from 'modules/spendings/mock/MockSpending';
 import MockSpendingRepository, {
     mockListSpendings,
 } from 'modules/spendings/mock/MockSpendingRepository';
 import { createStore } from 'redux/store';
 import NewSpendingForm from './NewSpendingForm';
-import { SpendingCurrency } from 'modules/spendings/domain/Spending';
+import {
+    SpendingCurrency,
+    SpendingFactory,
+} from 'modules/spendings/domain/Spending';
 
 afterEach(() => {
     jest.restoreAllMocks();
@@ -17,7 +19,7 @@ afterEach(() => {
 
 describe('NewSpendingForm', () => {
     test('Test adding a new spending, with valid inputs, expect creation to be started.', async () => {
-        const spendingToCreate = new MockSpendingFactory().from({
+        const spendingToCreate = new SpendingFactory().from({
             id: 1,
             amount: 1000,
             description: 'Example description',
@@ -26,13 +28,10 @@ describe('NewSpendingForm', () => {
         });
         mockListSpendings.mockResolvedValue([spendingToCreate]);
         const spendingRepository = MockSpendingRepository();
-        const spendingFactory = new MockSpendingFactory();
         const store = createStore();
 
         render(
-            <SpendingContext
-                spendingContextValue={{ spendingFactory, spendingRepository }}
-            >
+            <SpendingContext spendingContextValue={{ spendingRepository }}>
                 <Provider store={store}>
                     <NewSpendingForm />
                 </Provider>
@@ -64,14 +63,11 @@ describe('NewSpendingForm', () => {
 
     test('Test adding a new spending, with invalid inputs, expect creation not to be started.', async () => {
         const spendingRepository = MockSpendingRepository();
-        const spendingFactory = new MockSpendingFactory();
 
         const store = createStore();
 
         render(
-            <SpendingContext
-                spendingContextValue={{ spendingFactory, spendingRepository }}
-            >
+            <SpendingContext spendingContextValue={{ spendingRepository }}>
                 <Provider store={store}>
                     <NewSpendingForm />
                 </Provider>

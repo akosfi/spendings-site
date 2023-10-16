@@ -1,11 +1,11 @@
 import { SpendingCurrency, SpendingOrdering } from 'modules/spendings';
-import { MockSpendingFactory } from 'modules/spendings/mock/MockSpending';
 import MockSpendingRepository, {
     mockListSpendings,
 } from 'modules/spendings/mock/MockSpendingRepository';
 import ListSpendingUseCase from './listSpendingsUseCase';
+import { SpendingFactory } from 'modules/spendings/domain/Spending';
 
-const spending1 = new MockSpendingFactory().from({
+const spending1 = new SpendingFactory().from({
     id: 1,
     description: 'x1',
     amount: 10,
@@ -13,7 +13,7 @@ const spending1 = new MockSpendingFactory().from({
     spentAt: 'x',
 });
 
-const spending2 = new MockSpendingFactory().from({
+const spending2 = new SpendingFactory().from({
     id: 2,
     description: 'x2',
     amount: 100,

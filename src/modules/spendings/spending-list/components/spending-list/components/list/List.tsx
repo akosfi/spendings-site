@@ -9,11 +9,9 @@ import css from './List.module.scss';
 import ListItem from './components/list-item/ListItem';
 
 const List: FC = () => {
-    const { spendingRepository, spendingFactory } = useSpendingContext();
+    const { spendingRepository } = useSpendingContext();
     const dispatch = useDispatch<AppDispatch>();
-    const spendings = useSelector((state) =>
-        spendingListSelectors.getSpendings(state, spendingFactory),
-    );
+    const spendings = useSelector(spendingListSelectors.getSpendings);
     const isLoading = useSelector(spendingListSelectors.getIsLoading);
     const filters = useSelector(spendingListSelectors.getFilters);
 

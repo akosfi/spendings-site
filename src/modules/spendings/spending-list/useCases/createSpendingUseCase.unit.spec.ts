@@ -2,8 +2,10 @@ import MockSpendingRepository, {
     mockListSpendings,
 } from 'modules/spendings/mock/MockSpendingRepository';
 import CreateSpendingUseCase from './createSpendingUseCase';
-import { MockSpendingFactory } from 'modules/spendings/mock/MockSpending';
-import { SpendingCurrency } from 'modules/spendings/domain/Spending';
+import {
+    SpendingCurrency,
+    SpendingFactory,
+} from 'modules/spendings/domain/Spending';
 import { SpendingOrdering } from 'modules/spendings/domain/SpendingRepository';
 
 afterEach(() => {
@@ -12,7 +14,7 @@ afterEach(() => {
 
 describe('CreateSpendingUseCase', () => {
     test('Test creating a spending, with valid spending information, expect spending to be created.', async () => {
-        const spendingToCreate = new MockSpendingFactory().from({
+        const spendingToCreate = new SpendingFactory().from({
             id: 0,
             description: 'New spending',
             amount: 1,
