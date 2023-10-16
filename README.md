@@ -32,7 +32,7 @@ Make sure the following environment variable is always set for correct functiona
 
 ```bash
 # Base URL of the backend. It should be specified in .env during build in order to have a working build.
-NEXT_PUBLIC_SERVER_BASE_URL=http://localhost:8080
+NEXT_PUBLIC_SERVER_BASE_URL=
 ```
 
 4/A. Start the development server:
